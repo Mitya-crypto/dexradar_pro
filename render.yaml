@@ -1,0 +1,48 @@
+services:
+  - type: web
+    name: dexradar-api
+    env: node
+    rootDir: server
+    plan: starter
+    buildCommand: "npm ci"
+    startCommand: "node index.js"
+    autoDeploy: true
+    envVars:
+      - key: ALLOWED_ORIGIN
+        value: "https://app.dexradar.pro"
+      - key: FREE_DELAY_MINUTES
+        value: "5"
+      - key: BOT_TOKEN_FOR_AUTH
+        sync: false
+      - key: BILLING_ADMIN_SECRET
+        sync: false
+      - key: ENABLE_SOLANA
+        value: "true"
+      - key: BIRDEYE_WS_URL
+        sync: false
+      - key: BIRDEYE_SUBSCRIBE_MESSAGE
+        value: '{"type":"SUBSCRIBE_TOKEN_NEW_LISTING"}'
+
+  - type: worker
+    name: dexradar-bot
+    env: node
+    rootDir: bot
+    plan: starter
+    buildCommand: "npm ci"
+    startCommand: "node index.js"
+    autoDeploy: true
+    envVars:
+      - key: WEBAPP_URL
+        value: "https://app.dexradar.pro"
+      - key: TG_BOT_TOKEN
+        sync: false
+      - key: PAYMENT_PROVIDER_TOKEN
+        sync: false
+      - key: CURRENCY
+        value: "USD"
+      - key: PRICE_USD
+        value: "1000"
+      - key: BILLING_API_URL
+        value: "https://api.dexradar.pro/billing/markPaid"
+      - key: BILLING_ADMIN_SECRET
+        sync: false
